@@ -1,0 +1,18 @@
+# xprof-knowledge MCP — a CPU-only image (no accelerator, no mount). Build context = repo root.
+#   docker build -f Dockerfile.knowledge-mcp -t <ecr>/xprof-knowledge:<tag> .
+FROM python:3.12-slim
+
+WORKDIR /app
+COPY knowledge_mcp/requirements.txt knowledge_mcp/requirements.txt
+RUN pip install --no-cache-dir -r knowledge_mcp/requirements.txt
+
+COPY knowledge_mcp/ knowledge_mcp/
+COPY knowledge/ knowledge/
+
+# non-root, read-only-friendly
+RUN useradd -u 1000 -m app && chown -R app /app
+USER app
+ENV MCP_PORT=8080
+EXPOSE 8080
+
+CMD ["python", "-m", "knowledge_mcp.server"]
