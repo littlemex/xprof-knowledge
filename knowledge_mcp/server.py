@@ -1,9 +1,9 @@
-"""xprof-knowledge — a FastMCP server that serves cross-accelerator profiling & tuning know-how.
+"""accelprof-knowledge — a FastMCP server that serves cross-accelerator profiling & tuning know-how.
 
 One knowledge surface for GPU, Neuron, and cross-cutting methodology, so an agent driving the
 profile -> analyze -> improve -> re-experiment loop retrieves the relevant playbook over MCP. It is
 self-contained: pure Python, no accelerator, no cloud, no orchestrator — install it and run
-`xprof-knowledge-mcp`, then connect any MCP client over streamable-http.
+`accelprof-knowledge-mcp`, then connect any MCP client over streamable-http.
 """
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ from typing import Any
 
 from .library import CHIPS, KnowledgeLibrary, default_root
 
-SERVER_NAME = "xprof-knowledge"
+SERVER_NAME = "accelprof-knowledge"
 DEFAULT_HOST = "0.0.0.0"
 
 

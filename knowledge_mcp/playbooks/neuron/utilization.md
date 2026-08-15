@@ -10,7 +10,7 @@ refs:
 A NeuronCore (v2/v3, on Trn1/Trn2/Inf2) runs several engines concurrently — the Tensor engine
 (matmul), the Vector and Scalar engines (elementwise/activation/reduction), the GP-SIMD engine, plus
 the DMA paths and the sync/collective path. The first diagnosis question is which engine is the
-limiter, from the **engine-active** breakdown in the per-core profile report. The xprof analysis MCP
+limiter, from the **engine-active** breakdown in the per-core profile report. The accelprof analysis MCP
 produces that report via its `neuron-summary` analyzer; confirm the exact engine row names against
 your own profile, since the label set varies by NeuronCore generation and tool version.
 

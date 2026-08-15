@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "xprof-knowledge"
+name = "accelprof-knowledge"
 version = "0.1.0"
 description = "Cross-accelerator (NVIDIA GPU / AWS Neuron) profiling & tuning knowledge, served over MCP."
 readme = "README.md"
@@ -25,12 +25,12 @@ dependencies = [
 test = ["pytest"]
 
 [project.scripts]
-xprof-knowledge-mcp = "knowledge_mcp.server:main"
+accelprof-knowledge-mcp = "knowledge_mcp.server:main"
 
 [project.urls]
-Homepage = "https://github.com/littlemex/xprof-knowledge"
-Repository = "https://github.com/littlemex/xprof-knowledge"
-Issues = "https://github.com/littlemex/xprof-knowledge/issues"
+Homepage = "https://github.com/littlemex/accelprof-knowledge"
+Repository = "https://github.com/littlemex/accelprof-knowledge"
+Issues = "https://github.com/littlemex/accelprof-knowledge/issues"
 
 [tool.setuptools.packages.find]
 include = ["knowledge_mcp*"]

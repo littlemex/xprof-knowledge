@@ -1,6 +1,6 @@
-# xprof-knowledge — cross-accelerator profiling & tuning knowledge over MCP
+# accelprof-knowledge — cross-accelerator profiling & tuning knowledge over MCP
 
-[![ci](https://github.com/littlemex/xprof-knowledge/actions/workflows/ci.yml/badge.svg)](https://github.com/littlemex/xprof-knowledge/actions/workflows/ci.yml)
+[![ci](https://github.com/littlemex/accelprof-knowledge/actions/workflows/ci.yml/badge.svg)](https://github.com/littlemex/accelprof-knowledge/actions/workflows/ci.yml)
 ![python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![license](https://img.shields.io/badge/license-Apache--2.0-green)
 
@@ -19,14 +19,14 @@ keyword search beats an embedding index that would need reinventing and re-tunin
 ## Install and run
 
 ```bash
-pip install xprof-knowledge   # or, from a checkout: pip install .
-xprof-knowledge-mcp           # serves streamable-http on MCP_PORT (default 8080)
+pip install accelprof-knowledge   # or, from a checkout: pip install .
+accelprof-knowledge-mcp           # serves streamable-http on MCP_PORT (default 8080)
 ```
 
 Then register it with any MCP client — for example Claude Code:
 
 ```bash
-claude mcp add --transport http xprof-knowledge http://127.0.0.1:8080/mcp
+claude mcp add --transport http accelprof-knowledge http://127.0.0.1:8080/mcp
 ```
 
 Nothing else is required — no accelerator, no cloud, no cluster.
@@ -66,7 +66,7 @@ playbook loads and is well-formed.
 
 ## Related projects
 
-- **[xprof](https://github.com/littlemex/xprof)** — the experiment store + analysis MCP that maps a
+- **[accelprof](https://github.com/littlemex/accelprof)** — the experiment store + analysis MCP that maps a
   run to its profile files and analyzes them; pair it with this one so an analysis leads to a next
   step. When hosting both, give each its own `MCP_PORT` (both default to 8080).
 - The official **MLflow MCP** — run discovery and search.

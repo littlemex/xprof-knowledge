@@ -27,7 +27,7 @@ contended shared core, and write the resulting `.ntff` to durable storage as par
 it is not lost when the capture process exits.
 
 **Analyze (device-free).** Post-processing the NEFF + NTFF into a per-core report needs **no
-device**, which is why the xprof analysis MCP runs it on a CPU pod — its `neuron-summary` analyzer is
+device**, which is why the accelprof analysis MCP runs it on a CPU pod — its `neuron-summary` analyzer is
 the concrete command (a text report of engine-active times and DMA). Machine-readable and timeline
 formats also exist; check your installed `aws-neuronx-tools` version for the exact subcommand and
 `--output-format` options rather than assuming them. Start from the text/JSON summary and drop to a

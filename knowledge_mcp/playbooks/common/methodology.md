@@ -25,6 +25,6 @@ next profile is attributable.
    different resource), further work there has diminishing returns — re-classify and move on.
 
 How this maps to the tooling: the **MLflow MCP** finds and compares runs; the **analysis MCP**
-(xprof) resolves a run to its profile files on the mount and runs the profiler; this **knowledge
+(accelprof) resolves a run to its profile files on the mount and runs the profiler; this **knowledge
 MCP** supplies the diagnosis playbooks. A typical turn: search MLflow for the run → analyze its
 trace → search this knowledge base for the symptom → apply one change → log the next run.
