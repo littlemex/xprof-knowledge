@@ -36,8 +36,9 @@ _FRONT = re.compile(r"^---\n(.*?)\n---\n?(.*)$", re.DOTALL)
 
 
 def parse_topic(text: str, fallback_id: str) -> Topic:
-    """Parse one playbook file. Front matter is required; missing keys fall back to sane defaults so
-    a malformed file surfaces as a thin topic rather than crashing the whole server at boot."""
+    """Parse one playbook file. Front matter is expected but tolerated: missing keys (or no front
+    matter at all) fall back to sane defaults so a malformed file surfaces as a thin topic rather
+    than crashing the whole server at boot."""
     m = _FRONT.match(text)
     meta: dict = {}
     body = text
@@ -67,6 +68,9 @@ class KnowledgeLibrary:
         for path in sorted(self._root.rglob("*.md")):
             rel = path.relative_to(self._root).with_suffix("").as_posix()  # e.g. gpu/roofline
             topic = parse_topic(path.read_text(encoding="utf-8"), fallback_id=rel)
+            if topic.id in self._topics:
+                raise ValueError(f"duplicate topic id {topic.id!r} (front-matter id collides "
+                                 f"with another playbook) — ids must be unique")
             self._topics[topic.id] = topic
         if not self._topics:
             raise FileNotFoundError(f"no .md playbooks under {self._root}")
@@ -82,8 +86,10 @@ class KnowledgeLibrary:
 
     def search(self, query: str, chip: str | None = None, limit: int = 5) -> list[tuple[Topic, int]]:
         """Rank topics by keyword overlap: a title/tag hit weighs more than a body hit. Returns
-        (topic, score) for the best matches with a non-zero score."""
-        terms = [w for w in re.findall(r"[a-z0-9]+", query.lower()) if len(w) > 1]
+        (topic, score) for the best matches with a non-zero score. Tokenizes Unicode word runs, so a
+        query is never silently emptied by non-ASCII characters — but the playbooks are English, so
+        match on English keywords (roofline, coalescing, dma, collective, occupancy, …)."""
+        terms = [w for w in re.findall(r"\w+", query.lower(), re.UNICODE) if len(w) > 1]
         scored: list[tuple[Topic, int]] = []
         for t in self.list_topics(chip):
             title = t.title.lower()
@@ -99,8 +105,10 @@ class KnowledgeLibrary:
 
 
 def default_root() -> str:
-    """The packaged knowledge/ directory (repo root), overridable with KNOWLEDGE_ROOT."""
+    """The playbooks directory shipped inside the package (so it works from a wheel, with no repo
+    checkout). Override with KNOWLEDGE_ROOT to point at your own playbook set."""
     env = os.environ.get("KNOWLEDGE_ROOT")
     if env:
         return env
-    return str(Path(__file__).resolve().parent.parent / "knowledge")
+    from importlib.resources import files
+    return str(files("knowledge_mcp") / "playbooks")

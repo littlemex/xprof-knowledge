@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "xprof-knowledge"
+version = "0.1.0"
+description = "Cross-accelerator (NVIDIA GPU / AWS Neuron) profiling & tuning knowledge, served over MCP."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "littlemex" }]
+dependencies = [
+  "mcp==1.18.0",
+  "PyYAML>=6.0",
+]
+
+[project.scripts]
+xprof-knowledge-mcp = "knowledge_mcp.server:main"
+
+[project.urls]
+Homepage = "https://github.com/littlemex/xprof-knowledge"
+
+[tool.setuptools]
+packages = ["knowledge_mcp"]
+
+[tool.setuptools.package-data]
+# ship the playbooks inside the wheel so `pip install` needs no repo checkout
+knowledge_mcp = ["playbooks/**/*.md"]

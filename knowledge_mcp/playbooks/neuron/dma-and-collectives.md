@@ -23,7 +23,8 @@ with independent compute (the compiler/runtime can, if the graph exposes the ind
 parallelism so the collective payload is worth the launch, and confirm the inter-core fabric (not
 compute) is the bottleneck before scaling out further.
 
-**Logical NeuronCore (LNC) and placement.** Capturing or serving on the wrong core count or a
-contended device skews the picture — a whole-device capture on a shared node can mismatch the LNC
-configuration and produce a misleading or failed profile. Profile on a dedicated allocation with the
-same core configuration you serve with, so the collective and DMA timings reflect production.
+**Logical NeuronCore (LNC) and placement.** On Trn2, the logical-NeuronCore setting groups physical
+cores into one logical core; the compile-time and runtime `logical-nc-config` must match, or the run
+fails rather than silently mis-measuring. Capture on a dedicated allocation with the same LNC and
+core count you serve with, so the collective and DMA timings reflect production — a profile taken
+under a different core configuration is not comparable to your serving path.

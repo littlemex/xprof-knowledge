@@ -63,6 +63,13 @@ def test_empty_root_raises(tmp_path):
         KnowledgeLibrary(str(tmp_path / "does-not-exist"))
 
 
+def test_duplicate_topic_id_raises(tmp_path):
+    for rel in ("a.md", "b.md"):  # same front-matter id in two files
+        (tmp_path / rel).write_text("---\nid: gpu/dup\nchip: gpu\ntitle: T\n---\nbody", encoding="utf-8")
+    with pytest.raises(ValueError):
+        KnowledgeLibrary(str(tmp_path))
+
+
 # --- the real packaged playbooks -----------------------------------------------------------
 
 def test_packaged_playbooks_load_and_are_wellformed():

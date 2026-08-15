@@ -26,9 +26,11 @@ kernel launches, so "use shared memory" is not a substitute for fusion.
 
 **Access pattern.** For custom kernels, uncoalesced or large-stride global access inflates the
 sectors transferred per warp request; the wasted bandwidth caps throughput even at high occupancy.
-Confirm with *sectors per request* in Nsight Compute. Shared-memory stride that shares banks causes
-bank conflicts; conflict degree is `32 / gcd(stride, 32)` distinct banks — a stride coprime to 32
-(e.g. odd) avoids it.
+Confirm with *sectors per request* in Nsight Compute (the ideal for a fully coalesced 32-bit warp
+load is 4 sectors, i.e. 128 bytes). Shared memory has 32 banks of 4-byte words: an access with
+4-byte-word stride `s` touches `32/gcd(s,32)` distinct banks, so each bank is hit by `gcd(s,32)`
+threads — that `gcd(s,32)` is the conflict degree (a stride coprime to 32, e.g. any odd stride, is
+conflict-free; `s=32` is a 32-way conflict). Same-address accesses broadcast rather than conflict.
 
 **Watch for graph breaks (`torch.compile`).** Frequent Python-level branches cause graph breaks
 that split the graph into small subgraphs; cross-op fusion cannot cross a break and eager overhead
