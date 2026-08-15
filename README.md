@@ -1,5 +1,9 @@
 # xprof-knowledge — cross-accelerator profiling & tuning knowledge over MCP
 
+[![ci](https://github.com/littlemex/xprof-knowledge/actions/workflows/ci.yml/badge.svg)](https://github.com/littlemex/xprof-knowledge/actions/workflows/ci.yml)
+![python](https://img.shields.io/badge/python-3.10%2B-blue)
+![license](https://img.shields.io/badge/license-Apache--2.0-green)
+
 A self-contained MCP server that serves profiling and tuning know-how for **NVIDIA GPU**, **AWS
 Neuron**, and the cross-cutting methodology — so an agent (or you) driving the profile → analyze →
 improve → re-experiment loop can retrieve the relevant playbook over MCP.
@@ -15,12 +19,17 @@ keyword search beats an embedding index that would need reinventing and re-tunin
 ## Install and run
 
 ```bash
-pip install git+https://github.com/littlemex/xprof-knowledge   # or: pip install .
-xprof-knowledge-mcp          # serves streamable-http on MCP_PORT (default 8080)
+pip install xprof-knowledge   # or, from a checkout: pip install .
+xprof-knowledge-mcp           # serves streamable-http on MCP_PORT (default 8080)
 ```
 
-Then register `http://127.0.0.1:8080/mcp` as a streamable-http MCP in your client (Claude Code,
-Claude Desktop, or any MCP-capable agent). Nothing else is required.
+Then register it with any MCP client — for example Claude Code:
+
+```bash
+claude mcp add --transport http xprof-knowledge http://127.0.0.1:8080/mcp
+```
+
+Nothing else is required — no accelerator, no cloud, no cluster.
 
 ## Tools and resources
 
@@ -48,16 +57,32 @@ searchable and browsable. The playbooks are in English; search with English keyw
 ## Testing
 
 ```bash
-pip install -e . pytest
+pip install -e ".[test]"
 python -m pytest knowledge_mcp/ -q
 ```
 
 Tests cover front-matter parsing, list/get/search, duplicate-id detection, and that every packaged
 playbook loads and is well-formed.
 
+## Related projects
+
+- **[xprof](https://github.com/littlemex/xprof)** — the experiment store + analysis MCP that maps a
+  run to its profile files and analyzes them; pair it with this one so an analysis leads to a next
+  step. When hosting both, give each its own `MCP_PORT` (both default to 8080).
+- The official **MLflow MCP** — run discovery and search.
+
 ## Running in a container
 
 `Dockerfile` is a reference image that simply `pip install`s the package and runs the console
-script — a sample for containerized or clustered deployments. It assumes no orchestrator; a
-Kubernetes deployment that hosts this alongside other MCPs is a separate concern (see the
-`distributed-ai` deployment repo), not a dependency of this project.
+script — a sample for a containerized deployment. It assumes no orchestrator; a deployment that
+hosts this alongside other MCPs is a separate concern (see the `distributed-ai` deployment repo),
+not a dependency of this project.
+
+## Contributing & license
+
+Playbooks are the main contribution surface: add a Markdown file under
+`knowledge_mcp/playbooks/<chip>/` with the front matter shown above and open a PR — keep them
+distilled (symptom → cause → what to check → what to try) and link the upstream source rather than
+copying it. Code changes should keep `python -m pytest knowledge_mcp/ -q` green.
+
+Licensed under the Apache License 2.0 — see [LICENSE](LICENSE).

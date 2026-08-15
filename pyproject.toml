@@ -8,21 +8,32 @@ version = "0.1.0"
 description = "Cross-accelerator (NVIDIA GPU / AWS Neuron) profiling & tuning knowledge, served over MCP."
 readme = "README.md"
 requires-python = ">=3.10"
-license = { text = "Apache-2.0" }
+license = "Apache-2.0"
 authors = [{ name = "littlemex" }]
-dependencies = [
-  "mcp==1.18.0",
-  "PyYAML>=6.0",
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3",
+  "Intended Audience :: Developers",
+  "Topic :: System :: Benchmark",
 ]
+dependencies = [
+  "mcp>=1.18,<2",
+  "PyYAML>=6",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
 
 [project.scripts]
 xprof-knowledge-mcp = "knowledge_mcp.server:main"
 
 [project.urls]
 Homepage = "https://github.com/littlemex/xprof-knowledge"
+Repository = "https://github.com/littlemex/xprof-knowledge"
+Issues = "https://github.com/littlemex/xprof-knowledge/issues"
 
-[tool.setuptools]
-packages = ["knowledge_mcp"]
+[tool.setuptools.packages.find]
+include = ["knowledge_mcp*"]
 
 [tool.setuptools.package-data]
 # ship the playbooks inside the wheel so `pip install` needs no repo checkout
